@@ -43,7 +43,19 @@ pip install imutils
 Copy/Move the images that you need to encode to the images directory
 
 * Create enncoding
+```
 python image_processor_encode_eval.py
+```
 
 * Start Webcam and check that it can recognize images that it stored
+```
 python image_processor_webcam_eval.py
+```
+* load image and check that it can recognize images that it stored
+```
+python image_processor_images_eval.py
+```
+* Run Streamlist app to load image and check that it can recognize images that it stored
+```
+streamlit run image_processor_app.py
+```
