@@ -38,6 +38,7 @@ def read_enc_file():
 def compare_face_image(img, faces):
 	encodings = face_recognition.face_encodings(img)
 	names = []
+	data = read_enc_file()
 
 	# loop over the facial embeddings incase
 	# we have multiple embeddings for multiple fcaes
@@ -47,7 +48,6 @@ def compare_face_image(img, faces):
 		#Matches contain array with boolean values and True for the embeddings it matches closely
 		#and False for rest
 
-		data = read_enc_file()
 		matches = face_recognition.compare_faces(data["encodings"], encoding)
 
 		#set name =inknown if no encoding matches
@@ -98,7 +98,7 @@ def save_faces(new_img, name):
 	data = {"encodings": knownEncodings, "names": knownNames}
 
 	#use pickle to save data into a file for later use
-	f = open(enc_file, "wb")
+	f = open(enc_file, "ab")
 	f.write(pickle.dumps(data))
 	f.close()
 	return True
@@ -275,6 +275,7 @@ def main():
 				#st.image(frame)
 				st.success("Found {} faces".format(len(result_faces)))
 				result_names=compare_face_image(result_img,result_faces)
+				st.success("Found {} matched faces".format(len(result_names)))
 				if (len(result_names) > 0):
 					st.image(result_img)
 					st.success("Found {} matched faces".format(len(result_names)))
