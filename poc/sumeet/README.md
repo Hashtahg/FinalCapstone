@@ -18,9 +18,6 @@ conda install pandas
 
 
 pip install opencv-python
-#pip install pillow
-#pip install SimpleCV
-#pip install mahotas
 
 conda install -c conda-forge dlib
 #for apple M1 chips
@@ -31,12 +28,21 @@ install CMake from https://cmake.org/install/
 sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install
 cd dlib
 mkdir build; cd build; cmake .. ; cmake --build .
-python3 setup.py install --no USE_AVX_INSTRUCTIONS --no DLIB_USE_CUDA
+cd ..
+python setup.py install --no USE_AVX_INSTRUCTIONS --no DLIB_USE_CUDA
 
 pip install face_recognition
 pip install imutils
 
 ```
+## Apps
+The apps are all in the app directory
+Each app file needs to be added to the app.py in the parent folder
+
+## Modules
+There are two module directories
+image_process and token
+all the module specific code goes here
 
 ## Run
 * Prep
@@ -44,9 +50,15 @@ Copy/Move the images that you need to encode to the images directory
 
 * Create enncoding
 ```
+cd image_process
 python image_processor_encode_eval.py
 ```
 
+* Run the app
+from the poc/sumeet directory
+streamlit run app.py
+
+### Evaluation Run Config
 * Start Webcam and check that it can recognize images that it stored
 ```
 python image_processor_webcam_eval.py
@@ -54,8 +66,4 @@ python image_processor_webcam_eval.py
 * load image and check that it can recognize images that it stored
 ```
 python image_processor_images_eval.py
-```
-* Run Streamlist app to load image and check that it can recognize images that it stored
-```
-streamlit run image_processor_app.py
 ```

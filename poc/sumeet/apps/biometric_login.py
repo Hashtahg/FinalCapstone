@@ -6,6 +6,7 @@ __author__ = "Sumeet Vaidya"
 #------------------------------------------------------
 
 
+from multiapp import MultiApp
 import face_recognition
 import imutils
 import pickle
@@ -17,13 +18,13 @@ import numpy as np
 import streamlit as st
 
 #find path of xml file containing haarcascade file
-cascPathface = "./etc/haarcascade_frontalface_alt2.xml"
+cascPathface = "./image_process/etc/haarcascade_frontalface_alt2.xml"
 
 # load the harcaascade in the cascade classifier
 face_cascade = cv2.CascadeClassifier(cascPathface)
 
 # load the known faces and embeddings saved in last file
-enc_dir="./data"
+enc_dir="./image_process/data"
 enc_file = enc_dir+"/face_enc"
 #data = pickle.loads(open(enc_file, "rb").read())
 knownEncodings = []
@@ -77,7 +78,7 @@ def compare_face_image(img, faces):
 				# draw the predicted face name on the image
 				cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 				cv2.putText(img, name, (x, y), cv2.FONT_HERSHEY_SIMPLEX,
-					2.00, (0, 255, 0), 2)
+					0.75, (0, 255, 0), 2)
 
 
 	return names
@@ -114,14 +115,11 @@ def detect_faces(new_img):
 		cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
 	return img,faces 
 
+def biometric_login():
 
+	st.header("Biometric Login")
 
-def main():
-	"""Face Detection App"""
-
-	st.title("Face Detection App")
-	st.text("Build with Streamlit and OpenCV")
-
+	login_validate=False
 	activities = ["Save Image","Image Detect","Live Video","About"]
 	choice = st.sidebar.selectbox("Select Activty",activities)
 
@@ -190,74 +188,23 @@ def main():
 			our_image = Image.open(image_file)
 			st.text("Original Image")
 			# st.write(type(our_image))
-			st.image(our_image)
+			#st.image(our_image)
 			
+			st.image(our_image,width=300)
 
-			enhance_type = st.sidebar.radio("Enhance Type",
-				["Original","Gray-Scale","Contrast","Brightness","Blurring"])
-			if enhance_type == 'Gray-Scale':
-				new_img = np.array(our_image.convert('RGB'))
-				img = cv2.cvtColor(new_img,1)
-				gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-				# st.write(new_img)
-				st.image(gray)
-			elif enhance_type == 'Contrast':
-				c_rate = st.sidebar.slider("Contrast",0.5,3.5)
-				enhancer = ImageEnhance.Contrast(our_image)
-				img_output = enhancer.enhance(c_rate)
-				st.image(img_output)
-	
-			elif enhance_type == 'Brightness':
-				c_rate = st.sidebar.slider("Brightness",0.5,3.5)
-				enhancer = ImageEnhance.Brightness(our_image)
-				img_output = enhancer.enhance(c_rate)
-				st.image(img_output)
-	
-			elif enhance_type == 'Blurring':
-				new_img = np.array(our_image.convert('RGB'))
-				blur_rate = st.sidebar.slider("Brightness",0.5,3.5)
-				img = cv2.cvtColor(new_img,1)
-				blur_img = cv2.GaussianBlur(img,(11,11),blur_rate)
-				st.image(blur_img)
-	           
-			elif enhance_type == 'Original':
-				st.image(our_image,width=300)
-			else:
-				st.image(our_image,width=300)
-	
-	
-	
 			# Face Detection
-			task = ["Faces","Smiles","Eyes","Cannize","Cartonize"]
-			feature_choice = st.sidebar.selectbox("Find Features",task)
-			if st.button("Process"):
 	
-				if feature_choice == 'Faces':
-					new_img = np.array(our_image.convert('RGB'))
-					result_img,result_faces = detect_faces(new_img)
-					st.image(result_img)
-					st.success("Found {} faces".format(len(result_faces)))
-					result_names=compare_face_image(result_img,result_faces)
-					st.image(result_img)
-					st.success("Found {} matched faces".format(len(result_names)))
-	
-	#			elif feature_choice == 'Smiles':
-	#				result_img = detect_smiles(our_image)
-	#				st.image(result_img)
-	
-	
-	#			elif feature_choice == 'Eyes':
-	#				result_img = detect_eyes(our_image)
-	#				st.image(result_img)
-	
-	#			elif feature_choice == 'Cartonize':
-	#				result_img = cartonize_image(our_image)
-	#				st.image(result_img)
-	
-	#			elif feature_choice == 'Cannize':
-	#				result_canny = cannize_image(our_image)
-	#				st.image(result_canny)
+			new_img = np.array(our_image.convert('RGB'))
+			result_img,result_faces = detect_faces(new_img)
+			#st.image(result_img)
+			st.success("Found {} faces".format(len(result_faces)))
+			result_names=compare_face_image(result_img,result_faces)
+			st.image(result_img)
+			st.success("Found {} matched faces".format(len(result_names)))
 
+			if (len(result_names) > 0):
+				login_validate=True
+	
 
 
 
@@ -279,6 +226,7 @@ def main():
 				if (len(result_names) > 0):
 					st.image(result_img)
 					st.success("Found {} matched faces".format(len(result_names)))
+					login_validate=True
 					break
 				
 		
@@ -288,6 +236,28 @@ def main():
 		st.text("Sumeet,Pat, Bipasha, Hossain")
 		st.success("Sumeet,Pat, Bipasha, Hossain")
 
+	return login_validate
+
+
+
+
+def app():
+	
+	"""Biometric Login"""
+
+	st.title("Biometric Login")
+	st.text("Build with Streamlit and OpenCV")
+
+	result_login = biometric_login()
+
+	if (result_login == True):
+		st.text("Login Successful")
+
+	elif (result_login == False):
+		st.text("Login Authentication in Progress")
+
+
+		
 
 
 
@@ -295,5 +265,3 @@ def main():
 
 
 
-if __name__ == "__main__":
-    main()
