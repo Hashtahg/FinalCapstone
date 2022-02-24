@@ -55,8 +55,10 @@ python image_processor_encode_eval.py
 ```
 
 * Run the app
-from the poc/sumeet directory
+from the parent dir (poc/sumeet)
+```
 streamlit run app.py
+```
 
 ### Evaluation Run Config
 * Start Webcam and check that it can recognize images that it stored
