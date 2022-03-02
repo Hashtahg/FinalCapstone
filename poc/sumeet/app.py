@@ -6,7 +6,7 @@ import streamlit as st
 from multiapp import MultiApp
 
 #import your app modules here
-from apps import biometric_login, boarding_pass 
+from apps import biometric_login, boarding_pass
 
 app = MultiApp()
 

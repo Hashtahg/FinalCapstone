@@ -245,8 +245,8 @@ def app():
 	
 	"""Biometric Login"""
 
-	st.title("Biometric Login")
-	st.text("Build with Streamlit and OpenCV")
+	st.title("Fly Token App")
+	#st.text("Build with Streamlit and OpenCV")
 
 	result_login = biometric_login()
 

@@ -33,7 +33,8 @@ python setup.py install --no USE_AVX_INSTRUCTIONS --no DLIB_USE_CUDA
 
 pip install face_recognition
 pip install imutils
-
+pip install web3
+pip install pybase64
 ```
 ## Apps
 The apps are all in the app directory
@@ -69,3 +70,4 @@ python image_processor_webcam_eval.py
 ```
 python image_processor_images_eval.py
 ```
+file:////Users/sumeetvaidya/FinalCapstone/multi_app_poc/sumeet/token/graps.jpeg
